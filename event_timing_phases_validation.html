@@ -21,6 +21,13 @@
    <input type="checkbox" id="renderDelayCb">
    <label for="renderDelayCb">Force render delay</label>
 
+   <div id="result">
+       <div>Duration:</div><div id='duration'></div> 
+       <div>Input Delay:</div><div id='inputDelay'></div> 
+       <div>Processing Delay:</div><div id='processingDelay'></div> 
+       <div>Render Delay:</div><div id='renderDelay'></div> 
+   </div>
+
 <script>
     function spin(dur) {
         for(let i=performance.now(); performance.now() - i < dur; ) {}
@@ -52,9 +59,6 @@
             requestAnimationFrame(() => {
                 spin(100);
             });
-            // setTimeout(() => {
-            //     spin(15);
-            // }, 0);
         }
     });
 
@@ -72,19 +76,48 @@
 
         if(events.length > 0) {
             const ev = events[0];
-            const startTime = ev.startTime;
-            const processingStart = ev.processingStart;
-            const processingEnd = ev.processingEnd;
-            const duration = ev.duration;
 
-            const inputDelay = processingStart - startTime;
-            const processingDelay = processingEnd - processingStart;
-            const renderDelay = (startTime + duration) - processingEnd;
+            if(ev.target && ev.target.id !== 'clickBtn') {
+                // ignore non-test button clicks
+                return;
+            }
 
-            console.log(`\n[EventTiming entry] startTime: ${startTime} duration: ${duration}\n inputDelay: ${inputDelay.toFixed(2)}\n processingDelay: ${processingDelay.toFixed(2)}\n renderDelay: ${renderDelay.toFixed(2)}`);
+            const result = {
+                startTime: ev.startTime,
+                processingStart: ev.processingStart,
+                processingEnd: ev.processingEnd,
+                duration: ev.duration,
+    
+                inputDelay: ev.processingStart - ev.startTime,
+                processingDelay: ev.processingEnd - ev.processingStart,
+                renderDelay: (ev.startTime + ev.duration) - ev.processingEnd
+            };
+
+            console.log(`\n[EventTiming entry] startTime: ${result.startTime} duration: ${result.duration}\n inputDelay: ${result.inputDelay.toFixed(2)}\n processingDelay: ${result.processingDelay.toFixed(2)}\n renderDelay: ${result.renderDelay.toFixed(2)}`);
             clearInterval(renderDelayIntervalHandle);
+
+            // update results without blocking current frame
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    populateEntryResult(result);
+                });
+            });
         }
     });
+
+    function populateEntryResult(result) {
+        const durationDiv = document.getElementById('duration');
+        durationDiv.innerText = result.duration;
+        
+        const inputDelayDiv = document.getElementById('inputDelay');
+        inputDelayDiv.innerText = result.inputDelay.toFixed(2);
+        
+        const processingDelayDiv = document.getElementById('processingDelay');
+        processingDelayDiv.innerText = result.processingDelay.toFixed(2);
+        
+        const renderDelayDiv = document.getElementById('renderDelay');
+        renderDelayDiv.innerText = result.renderDelay.toFixed(2);
+    }
     
     // observe
     eventTimingObserver.observe({type: 'event', buffered: true, durationThreshold: 1});
