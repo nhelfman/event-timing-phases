@@ -6,9 +6,9 @@
 </head>
 
 <body>
-   <h1>Validate event timing phases</h1>
+   <h1>Event timing phases</h1>
 
-   <div id="clickDiv" style="cursor: pointer;">Click here</div>
+   <button id="clickBtn">Click here</button>
 
    <br/>
       
@@ -34,7 +34,7 @@
     const processingDelayCb = document.getElementById('processingDelayCb');
     const renderDelayCb = document.getElementById('renderDelayCb');
 
-    document.getElementById('clickDiv').addEventListener('click', e => {
+    document.getElementById('clickBtn').addEventListener('click', e => {
         console.log(`${performance.now()}: click`);
 
         if(processingDelayCb.checked) {
