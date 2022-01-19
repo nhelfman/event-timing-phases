@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+
+<body>
+   <h1>Validate event timing phases</h1>
+
+   <div id="clickDiv" style="cursor: pointer;">Click here</div>
+
+   <br/>
+      
+   <input type="checkbox" id="inputDelayCb">
+   <label for="inputDelayCb">Force input delay</label>
+   
+   <input type="checkbox" id="processingDelayCb" checked>
+   <label for="processingDelayCb">Force processing delay</label>
+
+   <input type="checkbox" id="renderDelayCb">
+   <label for="renderDelayCb">Force render delay</label>
+
+<script>
+    function spin(dur) {
+        for(let i=performance.now(); performance.now() - i < dur; ) {}
+    }
+
+    let count = 0;
+    let inputDelayIntervalHandle = -1;
+    let renderDelayIntervalHandle = -1;
+
+    const inputDelayCb = document.getElementById('inputDelayCb');
+    const processingDelayCb = document.getElementById('processingDelayCb');
+    const renderDelayCb = document.getElementById('renderDelayCb');
+
+    document.getElementById('clickDiv').addEventListener('click', e => {
+        console.log(`${performance.now()}: click`);
+
+        if(processingDelayCb.checked) {
+            spin(100);
+        }
+
+        // e.target.innerText = `Click ${count}`;
+        count++;
+
+        clearInterval(inputDelayIntervalHandle);
+        
+        inputDelayCb.checked = false;
+
+        if(renderDelayCb.checked) {
+            requestAnimationFrame(() => {
+                spin(100);
+            });
+            // setTimeout(() => {
+            //     spin(15);
+            // }, 0);
+        }
+    });
+
+    inputDelayCb.addEventListener('change', e => {
+        console.log('change input delay: ' + e.target.checked);
+
+        inputDelayIntervalHandle = setInterval(() => {
+            // issue continues main thread block tasks
+            spin(30);
+        }, 0);
+    });
+
+    const eventTimingObserver = new PerformanceObserver((list) => {
+        const events = list.getEntriesByName('click');
+
+        if(events.length > 0) {
+            const ev = events[0];
+            const startTime = ev.startTime;
+            const processingStart = ev.processingStart;
+            const processingEnd = ev.processingEnd;
+            const duration = ev.duration;
+
+            const inputDelay = processingStart - startTime;
+            const processingDelay = processingEnd - processingStart;
+            const renderDelay = (startTime + duration) - processingEnd;
+
+            console.log(`\n[EventTiming entry] startTime: ${startTime} duration: ${duration}\n inputDelay: ${inputDelay.toFixed(2)}\n processingDelay: ${processingDelay.toFixed(2)}\n renderDelay: ${renderDelay.toFixed(2)}`);
+            clearInterval(renderDelayIntervalHandle);
+        }
+    });
+    
+    // observe
+    eventTimingObserver.observe({type: 'event', buffered: true, durationThreshold: 1});
+</script>
+
+</body>
+</html>
