@@ -73,11 +73,9 @@
     });
 
     inputDelayCb.addEventListener('change', e => {
-        console.log('change input delay: ' + e.target.checked);
-
         inputDelayIntervalHandle = setInterval(() => {
             // issue continues main thread block tasks
-            spin(30);
+            spin(50);
         }, 0);
     });
 
