@@ -1,8 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <title>Event Timing Phases expermintation</title>
+    <style>
+        #result {
+            display: grid;
+            grid-template-columns: 120px 60px;
+        }
 
+        .measure {
+            text-align: right;
+        }
+    </style>
 </head>
 
 <body>
@@ -22,10 +32,10 @@
    <label for="renderDelayCb">Force render delay</label>
 
    <div id="result">
-       <div>Duration:</div><div id='duration'></div> 
-       <div>Input Delay:</div><div id='inputDelay'></div> 
-       <div>Processing Delay:</div><div id='processingDelay'></div> 
-       <div>Render Delay:</div><div id='renderDelay'></div> 
+       <div>Duration:</div><div id='duration' class="measure">_</div> 
+       <div>Input Delay:</div><div id='inputDelay' class="measure">_</div> 
+       <div>Processing Delay:</div><div id='processingDelay' class="measure">_</div> 
+       <div>Render Delay:</div><div id='renderDelay' class="measure">_</div> 
    </div>
 
 <script>
