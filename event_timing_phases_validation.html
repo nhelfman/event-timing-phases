@@ -37,8 +37,7 @@
         <label for="processingDelayCb">Force processing delay</label>
 
         <input type="checkbox" id="renderDelayCb">
-<label for="renderDelayCb">Force render delay</label>
-
+        <label for="renderDelayCb">Force render delay</label>
    </div>
 
    <div class="result">
@@ -55,7 +54,6 @@
 
     let count = 0;
     let inputDelayIntervalHandle = -1;
-    let renderDelayIntervalHandle = -1;
 
     const inputDelayCb = document.getElementById('inputDelayCb');
     const processingDelayCb = document.getElementById('processingDelayCb');
@@ -68,7 +66,7 @@
             spin(100);
         }
 
-        // e.target.innerText = `Click ${count}`;
+        e.target.innerText = `Click here ${count}`;
         count++;
 
         clearInterval(inputDelayIntervalHandle);
@@ -112,7 +110,6 @@
             };
 
             console.log(`\n[EventTiming entry] startTime: ${result.startTime} duration: ${result.duration}\n inputDelay: ${result.inputDelay.toFixed(2)}\n processingDelay: ${result.processingDelay.toFixed(2)}\n renderDelay: ${result.renderDelay.toFixed(2)}`);
-            clearInterval(renderDelayIntervalHandle);
 
             // update results without blocking current frame
             requestAnimationFrame(() => {
