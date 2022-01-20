@@ -4,9 +4,18 @@
 <head>
     <title>Event Timing Phases expermintation</title>
     <style>
-        #result {
+        body {
+            font-family: Arial;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        .result {
             display: grid;
-            grid-template-columns: 120px 60px;
+            grid-template-columns: 160px 60px;
+            margin-top: 20px;
         }
 
         .measure {
@@ -20,22 +29,23 @@
 
    <button id="clickBtn">Click here</button>
 
-   <br/>
-      
-   <input type="checkbox" id="inputDelayCb">
-   <label for="inputDelayCb">Force input delay</label>
-   
-   <input type="checkbox" id="processingDelayCb" checked>
-   <label for="processingDelayCb">Force processing delay</label>
+   <div class="controls">
+        <input type="checkbox" id="inputDelayCb">
+        <label for="inputDelayCb">Force input delay</label>
 
-   <input type="checkbox" id="renderDelayCb">
-   <label for="renderDelayCb">Force render delay</label>
+        <input type="checkbox" id="processingDelayCb" checked>
+        <label for="processingDelayCb">Force processing delay</label>
 
-   <div id="result">
-       <div>Duration:</div><div id='duration' class="measure">_</div> 
-       <div>Input Delay:</div><div id='inputDelay' class="measure">_</div> 
-       <div>Processing Delay:</div><div id='processingDelay' class="measure">_</div> 
-       <div>Render Delay:</div><div id='renderDelay' class="measure">_</div> 
+        <input type="checkbox" id="renderDelayCb">
+<label for="renderDelayCb">Force render delay</label>
+
+   </div>
+
+   <div class="result">
+        <div>Duration:</div><div id='duration' class="measure">_</div> 
+        <div>Input Delay:</div><div id='inputDelay' class="measure">_</div> 
+        <div>Processing Delay:</div><div id='processingDelay' class="measure">_</div> 
+        <div>Render Delay:</div><div id='renderDelay' class="measure">_</div> 
    </div>
 
 <script>
