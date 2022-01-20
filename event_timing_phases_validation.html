@@ -63,6 +63,7 @@
         console.log(`${performance.now()}: click`);
 
         if(processingDelayCb.checked) {
+            // block event handler
             spin(100);
         }
 
@@ -74,6 +75,7 @@
         inputDelayCb.checked = false;
 
         if(renderDelayCb.checked) {
+            // block rendering by spinning last task in frame
             requestAnimationFrame(() => {
                 spin(100);
             });
@@ -81,8 +83,8 @@
     });
 
     inputDelayCb.addEventListener('change', e => {
+        // issue continues main thread block tasks to block next input
         inputDelayIntervalHandle = setInterval(() => {
-            // issue continues main thread block tasks
             spin(50);
         }, 0);
     });
@@ -119,6 +121,9 @@
             });
         }
     });
+    
+    // observe
+    eventTimingObserver.observe({type: 'event', buffered: true, durationThreshold: 1});
 
     function populateEntryResult(result) {
         const durationDiv = document.getElementById('duration');
@@ -133,9 +138,6 @@
         const renderDelayDiv = document.getElementById('renderDelay');
         renderDelayDiv.innerText = result.renderDelay.toFixed(2);
     }
-    
-    // observe
-    eventTimingObserver.observe({type: 'event', buffered: true, durationThreshold: 1});
 </script>
 
 </body>
